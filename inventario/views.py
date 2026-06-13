@@ -1,10 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from .models import Producto, Categoria, Movimiento
 
 # 1. VISTA PRINCIPAL - DASHBOARD
 def home_admin(request):
     productos = Producto.objects.all()
-    contexto = {'productos': productos}
+    total_productos = productos.count()
+    alertas_stock_bajo = productos.filter(stock__lte=2).count()
+    movimientos_hoy = Movimiento.objects.filter(fecha__date=timezone.now().date()).count()
+    recent_movements = Movimiento.objects.select_related('producto').order_by('-fecha')[:5]
+    # También exponemos la variable con nombre en español para las plantillas que la esperan
+    movimientos_recientes = recent_movements
+
+    contexto = {
+        'productos': productos,
+        'total_productos': total_productos,
+        'alertas_stock_bajo': alertas_stock_bajo,
+        'movimientos_hoy': movimientos_hoy,
+        'recent_movements': recent_movements,
+        'movimientos_recientes': movimientos_recientes,
+    }
     return render(request, 'inventario/dashboard.html', contexto)
 
 # 2. LOGICA PARA CREAR ARTICULOS (ALTA)
@@ -37,7 +52,7 @@ def crear_producto(request):
             
     # Si entran por primera vez, les mandamos las categorías para que elija el desplegable
     categorias = Categoria.objects.all()
-    return render(request, 'inventario/formulario_producto.html', {'categorias': categorias})
+    return render(request, 'inventario/formulario_producto.html', {'categorias': categorias, 'producto': None})
 
 # 3. LOGICA PARA EDITAR ARTICULOS (MODIFICACION)
 def editar_producto(request, id):
@@ -74,3 +89,8 @@ def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     producto.delete()
     return redirect('home_admin')
+
+
+def movimientos(request):
+    movimientos = Movimiento.objects.select_related('producto').order_by('-fecha')
+    return render(request, 'inventario/movimientos.html', {'movimientos': movimientos})

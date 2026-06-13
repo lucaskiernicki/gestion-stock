@@ -1,55 +1,84 @@
-{% extends 'inventario/base.html' %}
+﻿{% extends 'inventario/base.html' %}
 
-{% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0 fw-bold">Control de Stock - ELITE</h4>
-                <a href="/crear_producto/" class="btn btn-sm btn-primary fw-bold">+ Agregar Repuesto</a>
+{% block contenido %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="h4">PANEL DE CONTROL</h2>
+            <p class="text-muted">Resumen rápido de productos, alertas y movimientos recientes.</p>
+        </div>
+        <a href="{% url 'crear_producto' %}" class="btn btn-figma-success">+ AGREGAR NUEVO PRODUCTO</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-white rounded shadow-sm">
+                <small class="text-muted">TOTAL PRODUCTOS</small>
+                <div class="h3">{{ total_productos }}</div>
             </div>
-            <div class="card-body bg-white text-dark">
-                
-                <table class="table table-hover table-bordered align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Producto / Repuesto</th>
-                            <th>Categoría</th>
-                            <th>Precio</th>
-                            <th class="text-center">Stock Actual</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for prod in productos %}
-                        <tr>
-                            <td class="fw-bold">{{ prod.nombre }}</td>
-                            <td>{{ prod.categoria.nombre }}</td>
-                            <td>${{ prod.precio }}</td>
-                            <td class="text-center fw-bold">
-                                {% if prod.stock < 5 %}
-                                    <span class="badge bg-danger">{{ prod.stock }} (¡Alerta Crítica!)</span>
-                                {% else %}
-                                    <span class="badge bg-success">{{ prod.stock }}</span>
-                                {% endif %}
-                            </td>
-                            <td class="text-center">
-                                <a href="/editar_producto/{{ prod.id }}/" class="btn btn-xs btn-warning btn-sm me-1">Editar</a>
-                                <a href="/eliminar_producto/{{ prod.id }}/" class="btn btn-xs btn-danger btn-sm" onclick="return confirm('¿Estás seguro?');">Borrar</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
-                                No hay productos registrados en el sistema de stock todavía.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-white rounded shadow-sm">
+                <small class="text-muted">ALERTAS STOCK BAJO</small>
+                <div class="h3">{{ alertas_stock_bajo }}</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="p-3 bg-white rounded shadow-sm">
+                <small class="text-muted">MOVIMIENTOS HOY</small>
+                <div class="h3">{{ movimientos_hoy }}</div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="card-title mb-0">PRODUCTOS</h5>
+                <a href="{% url 'crear_producto' %}" class="btn btn-sm btn-outline-primary">+ AGREGAR NUEVO PRODUCTO</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover text-uppercase">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NOMBRE DEL PRODUCTO</th>
+                            <th>CATEGORÍA</th>
+                            <th>STOCK ACTUAL</th>
+                            <th>ESTADO</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.categoria.nombre }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>
+                                    {% if producto.stock == 0 %}
+                                        <span class="badge-sin">Sin Stock</span>
+                                    {% elif producto.stock <= 2 %}
+                                        <span class="badge-bajo">Stock Bajo</span>
+                                    {% else %}
+                                        <span class="badge-normal">Normal</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                                    <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger ms-2">Borrar</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">No hay productos registrados en el sistema actualmente.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
