@@ -17,7 +17,7 @@ El objetivo principal es resolver la problemática de control de inventario, per
 
 ## Funcionalidades Principales
 * **Dashboard Principal:** Panel de control con métricas clave del estado actual del stock
-* **Gestión de Categorías:** Clasificación y organización de productos[cite: 8].
+* **Gestión de Categorías:** Clasificación y organización de producto.
 * **Registro de Movimientos:** Control estricto de entradas y salidas de stock con validación ante faltantes
 
 ## Instrucciones de Instalación y Ejecución
