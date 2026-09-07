@@ -6,96 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sistema de Gestión de Inventario</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        :root{
-            --bg: #f4f6f9;
-            --surface: #ffffff;
-            --text: #223344;
-            --primary: #1e73be;
-            --accent: #2ec4b6;
-            --danger: #e71d36;
-            --muted: #6c757d;
-            --input-background: #ffffff;
-            --card-shadow: 0 6px 18px rgba(16,24,40,0.06);
-        }
-
-        .dark-mode{
-            --bg: #0b1220;
-            --surface: #0f1724;
-            --text: #e6eef8;
-            --primary: #235a8f;
-            --accent: #2ec4b6;
-            --danger: #ff6b6b;
-            --muted: #9aa6bd;
-            --input-background: #0b1220;
-            --card-shadow: 0 6px 18px rgba(2,6,23,0.6);
-        }
-
-        html,body{height:100%;}
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-            margin:0;
-        }
-
-        /* TOPBAR */
-        .top-navbar {
-            background-color: var(--primary);
-            color: #ffffff;
-            padding: 0.9rem 1.75rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-        }
-        .brand-title{ font-size:1.05rem; font-weight:700; letter-spacing:0.02em; }
-
-        /* SIDEBAR */
-        .sidebar-menu { width:250px; background:var(--surface); min-height:calc(100vh - 58px); border-right:1px solid #e6e9ef; padding-top:1rem; }
-        .sidebar-menu .nav-link { color:var(--muted); font-weight:700; font-size:0.85rem; padding:0.85rem 1.2rem; display:flex; align-items:center; gap:10px; text-transform:uppercase; letter-spacing:0.04em; transition:all .15s ease; }
-        .sidebar-menu .nav-link:hover, .sidebar-menu .nav-link.active { background:rgba(30,115,190,0.05); color:var(--primary); }
-
-        /* LAYOUT */
-        .content-layout { padding:2.25rem; background:var(--bg); min-height:100vh; }
-
-        /* FIGMA BUTTON */
-        .btn-figma-success { background:var(--accent); color:#fff; font-weight:700; border:none; padding:0.55rem 1.05rem; border-radius:6px; font-size:0.9rem; }
-        .btn-figma-success:hover{ filter:brightness(.95); }
-
-        /* BADGES */
-        .badge-normal { background:var(--accent); color:white; padding:0.36rem .7rem; border-radius:20px; font-size:0.78rem; font-weight:700; }
-        .badge-bajo { background:#ff9f1c; color:white; padding:0.36rem .7rem; border-radius:20px; font-size:0.78rem; font-weight:700; }
-        .badge-sin { background:var(--danger); color:white; padding:0.36rem .7rem; border-radius:20px; font-size:0.78rem; font-weight:700; }
-        .badge-success { background:var(--accent); color:white; padding:0.32rem .6rem; border-radius:999px; font-size:0.78rem; font-weight:700; }
-        .badge-danger { background:var(--danger); color:white; padding:0.32rem .6rem; border-radius:999px; font-size:0.78rem; font-weight:700; }
-
-        /* Helpers */
-        .page-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-        .card-row{ display:flex; gap:1rem; margin-bottom:1.25rem; }
-        .metric-card{ background:var(--surface); padding:1rem 1.2rem; border-radius:8px; box-shadow:var(--card-shadow); flex:1; }
-
-        .panel-card{ background:var(--surface); border-radius:8px; box-shadow:var(--card-shadow); overflow:hidden; }
-        .panel-header{ padding:1rem 1.25rem; border-bottom:1px solid rgba(0,0,0,0.04); }
-        .panel-body{ padding:1rem; }
-
-        table{ width:100%; border-collapse:collapse; }
-        table thead th{ text-align:left; color:var(--muted); font-weight:700; padding:0.75rem 0.5rem; font-size:0.85rem; }
-        table tbody td{ padding:0.6rem 0.5rem; border-top:1px solid rgba(0,0,0,0.04); }
-
-        .form-card{ background:var(--surface); border-radius:8px; box-shadow:var(--card-shadow); padding:1.25rem; }
-
-        a.text-muted, .text-muted{ color:var(--muted); }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div class="d-flex">
         <aside class="sidebar-menu">
             <div class="px-3 mb-4">
-                <a href="{% url 'home_admin' %}" class="brand-title text-decoration-none text-dark">SISTEMA DE GESTIÓN DE INVENTARIO</a>
+                <a href="{% url 'home_admin' %}" class="brand-title text-decoration-none">SISTEMA DE GESTIÓN DE INVENTARIO</a>
             </div>
             <nav class="nav flex-column px-2">
-                <a class="nav-link active" href="{% url 'home_admin' %}">📊 Inicio</a>
-                <a class="nav-link" href="{% url 'crear_producto' %}">📦 Productos</a>
-                <a class="nav-link" href="{% url 'home_admin' %}">🏷️ Categorías</a>
-                <a class="nav-link" href="{% url 'registrar_movimiento' %}">🔁 Movimientos</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'home_admin' %}active{% endif %}" href="{% url 'home_admin' %}">Inicio</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'crear_producto' %}active{% endif %}" href="{% url 'crear_producto' %}">Productos</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'listar_categorias' %}active{% endif %}" href="{% url 'listar_categorias' %}">Categorías</a>
+                <a class="nav-link {% if request.resolver_match.url_name == 'registrar_movimiento' or request.resolver_match.url_name == 'movimientos' %}active{% endif %}" href="{% url 'movimientos' %}">Movimientos</a>
             </nav>
         </aside>
 
@@ -105,7 +28,7 @@
                     <div class="brand-title">SISTEMA DE GESTIÓN DE INVENTARIO</div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <button id="theme-toggle" class="btn btn-sm btn-outline-light">🌙</button>
+                    <button id="theme-toggle" class="btn btn-sm btn-outline-light">Modo Oscuro</button>
                     <button class="btn btn-sm btn-light">Perfil</button>
                 </div>
             </header>
@@ -116,26 +39,23 @@
         </div>
     </div>
 
-    <script>
-        // Tema persistente en localStorage
-        (function(){
-            const root = document.documentElement;
-            const toggle = document.getElementById('theme-toggle');
-            const current = localStorage.getItem('theme');
-            const apply = (mode)=>{
-                if(mode === 'dark') document.documentElement.classList.add('dark-mode');
-                else document.documentElement.classList.remove('dark-mode');
-                toggle.textContent = mode === 'dark' ? '☀️' : '🌙';
-            }
-            apply(current === 'dark' ? 'dark' : 'light');
-            toggle.addEventListener('click', ()=>{
-                const now = document.documentElement.classList.toggle('dark-mode') ? 'dark' : 'light';
-                localStorage.setItem('theme', now);
-                toggle.textContent = now === 'dark' ? '☀️' : '🌙';
-            });
-        })();
-    </script>
+    <!-- Contenedor del Popup de Notificaciones -->
+    <div id="popup-notificacion" class="popup-oculto">
+        <span id="popup-mensaje">Mensaje de prueba</span>
+        <button onclick="cerrarPopup()" class="btn-cerrar">&times;</button>
+    </div>
 
+    <!-- Mensajes del sistema (Django) procesados por script.js -->
+    {% if messages %}
+        <div id="django-messages" style="display: none;">
+            {% for message in messages %}
+                <span class="django-message-item" data-tags="{{ message.tags }}">{{ message }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Scripts externos -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

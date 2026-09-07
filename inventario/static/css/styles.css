@@ -1,0 +1,447 @@
+/* ==========================================================================
+   1. VARIABLES Y CONFIGURACIÓN GLOBAL
+   ========================================================================== */
+:root {
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --text: #223344;
+    --primary: #1e73be;
+    --accent: #2ec4b6;
+    --danger: #e71d36;
+    --muted: #6c757d;
+    --input-background: #ffffff;
+    --border: #e2e8f0;
+    --card-shadow: 0 4px 12px rgba(16, 24, 40, 0.06);
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    margin: 0;
+}
+
+/* ==========================================================================
+   2. MODO OSCURO (DARK MODE ELEGANTE Y LEGIBLE)
+   ========================================================================== */
+.dark-mode {
+    --bg: #0b0f19;
+    --surface: #151d30;
+    --text: #f8fafc;
+    --primary: #3b82f6;
+    --accent: #14b8a6;
+    --danger: #f43f5e;
+    --muted: #94a3b8;
+    --border: #243049;
+    --input-background: #0b0f19;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.dark-mode body,
+.dark-mode html {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.dark-mode .content-layout {
+    background-color: var(--bg);
+}
+
+/* Barra Superior y Lateral en Modo Oscuro */
+.dark-mode .top-navbar {
+    background-color: #0f1626;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .sidebar-menu {
+    background-color: #0f1626;
+    border-right: 1px solid var(--border);
+}
+
+.dark-mode .sidebar-menu .brand-title,
+.dark-mode .brand-title {
+    color: #ffffff !important;
+}
+
+.dark-mode .sidebar-menu .nav-link {
+    color: var(--muted);
+}
+
+.dark-mode .sidebar-menu .nav-link:hover,
+.dark-mode .sidebar-menu .nav-link.active {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa !important;
+}
+
+/* Tarjetas y Contenedores en Modo Oscuro */
+.dark-mode .card,
+.dark-mode .panel-card,
+.dark-mode .form-card,
+.dark-mode .metric-card,
+.dark-mode .bg-white {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--card-shadow) !important;
+}
+
+/* Títulos y Textos en Modo Oscuro */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6,
+.dark-mode .card-title,
+.dark-mode .page-title {
+    color: #f8fafc !important;
+}
+
+.dark-mode .text-muted,
+.dark-mode .eyebrow {
+    color: var(--muted) !important;
+}
+
+.dark-mode .text-dark {
+    color: #f8fafc !important;
+}
+
+/* Tablas en Modo Oscuro */
+.dark-mode table,
+.dark-mode .table {
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+.dark-mode .table > :not(caption) > * > * {
+    background-color: transparent !important;
+    color: var(--text) !important;
+    border-bottom-color: var(--border) !important;
+}
+
+.dark-mode .table-light,
+.dark-mode thead.table-light,
+.dark-mode thead th {
+    background-color: #1a2338 !important;
+    color: #cbd5e1 !important;
+    border-bottom: 2px solid var(--border) !important;
+}
+
+.dark-mode .table-hover > tbody > tr:hover > * {
+    background-color: rgba(255, 255, 255, 0.035) !important;
+    color: #ffffff !important;
+}
+
+/* Formularios e Inputs en Modo Oscuro */
+.dark-mode .form-control,
+.dark-mode .form-select {
+    background-color: #0b0f19 !important;
+    color: #f8fafc !important;
+    border-color: var(--border) !important;
+}
+
+.dark-mode .form-control:focus,
+.dark-mode .form-select:focus {
+    background-color: #0b0f19 !important;
+    color: #ffffff !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark-mode .form-control::placeholder {
+    color: #64748b;
+}
+
+.dark-mode .form-label {
+    color: #e2e8f0 !important;
+}
+
+.dark-mode select option {
+    background-color: #0f1626;
+    color: #ffffff;
+}
+
+/* Botones en Modo Oscuro */
+.dark-mode .btn-outline-primary {
+    color: #60a5fa !important;
+    border-color: #3b82f6 !important;
+}
+
+.dark-mode .btn-outline-primary:hover {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .btn-outline-secondary {
+    color: #cbd5e1 !important;
+    border-color: #475569 !important;
+}
+
+.dark-mode .btn-outline-secondary:hover {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .btn-light {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: var(--border) !important;
+}
+
+.dark-mode .btn-light:hover {
+    background-color: #334155 !important;
+}
+
+/* ==========================================================================
+   3. BARRA SUPERIOR (TOPBAR) Y LATERAL (SIDEBAR)
+   ========================================================================== */
+.top-navbar {
+    background-color: var(--primary);
+    color: #ffffff;
+    padding: 0.9rem 1.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.brand-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: inherit;
+}
+
+.sidebar-menu {
+    width: 250px;
+    background: var(--surface);
+    min-height: calc(100vh - 58px);
+    border-right: 1px solid var(--border);
+    padding-top: 1rem;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.sidebar-menu .brand-title {
+    color: var(--text);
+}
+
+.sidebar-menu .nav-link {
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.85rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: all .15s ease;
+}
+
+.sidebar-menu .nav-link:hover,
+.sidebar-menu .nav-link.active {
+    background: rgba(30, 115, 190, 0.08);
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   4. ESTRUCTURA Y CONTENEDORES (LAYOUT)
+   ========================================================================== */
+.content-layout {
+    padding: 2.25rem;
+    background: var(--bg);
+    min-height: 100vh;
+    transition: background-color 0.25s ease;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.metric-card {
+    background: var(--surface);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    flex: 1;
+}
+
+.panel-card {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.panel-body {
+    padding: 1rem;
+}
+
+.form-card {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    padding: 1.25rem;
+}
+
+/* ==========================================================================
+   5. BOTONES Y ETIQUETAS (BADGES)
+   ========================================================================== */
+.btn-figma-success {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    padding: 0.55rem 1.05rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: filter 0.2s ease;
+}
+
+.btn-figma-success:hover {
+    filter: brightness(.92);
+}
+
+.badge-normal {
+    background: var(--accent);
+    color: white;
+    padding: 0.36rem .7rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-bajo {
+    background: #f59e0b;
+    color: white;
+    padding: 0.36rem .7rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-sin {
+    background: var(--danger);
+    color: white;
+    padding: 0.36rem .7rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-success {
+    background: #10b981;
+    color: white;
+    padding: 0.32rem .6rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.badge-danger {
+    background: var(--danger);
+    color: white;
+    padding: 0.32rem .6rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   6. TABLAS Y ELEMENTOS AUXILIARES
+   ========================================================================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th {
+    text-align: left;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+table tbody td {
+    padding: 0.6rem 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+a.text-muted, .text-muted {
+    color: var(--muted);
+}
+
+/* ==========================================================================
+   7. POPUP DE NOTIFICACIONES
+   ========================================================================== */
+#popup-notificacion {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    z-index: 9999;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.popup-oculto {
+    opacity: 0;
+    transform: translateX(100px);
+    pointer-events: none;
+}
+
+.popup-visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* Estados y colores del popup */
+.estado-alta {
+    background-color: #28a745;
+}
+
+.estado-baja {
+    background-color: #dc3545;
+}
+
+.estado-modificacion {
+    background-color: #ffc107;
+    color: #333;
+}
+
+/* Botón de cerrar popup */
+.btn-cerrar {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}

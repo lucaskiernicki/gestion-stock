@@ -1,49 +1,54 @@
-﻿{% extends 'inventario/base.html' %}
+{% extends 'inventario/base.html' %}
 
 {% block contenido %}
-    <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
         <div>
-            <h2 class="h4">PANEL DE CONTROL</h2>
-            <p class="text-muted">Resumen rápido de productos, alertas y movimientos recientes.</p>
+            <h2 class="h4 mb-1">PANEL DE CONTROL</h2>
+            <p class="text-muted mb-0">Resumen rápido de productos, alertas y movimientos recientes.</p>
         </div>
-        <a href="{% url 'crear_producto' %}" class="btn btn-figma-success">+ AGREGAR NUEVO PRODUCTO</a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'movimientos' %}" class="btn btn-outline-primary fw-bold">REGISTRAR MOVIMIENTO</a>
+            <a href="{% url 'crear_producto' %}" class="btn btn-figma-success">+ AGREGAR NUEVO PRODUCTO</a>
+        </div>
     </div>
 
     <div class="row g-3 mb-4">
         <div class="col-12 col-md-4">
             <div class="p-3 bg-white rounded shadow-sm">
-                <small class="text-muted">TOTAL PRODUCTOS</small>
-                <div class="h3">{{ total_productos }}</div>
+                <small class="text-muted fw-bold">TOTAL PRODUCTOS</small>
+                <div class="h3 mb-0">{{ total_productos }}</div>
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="p-3 bg-white rounded shadow-sm">
-                <small class="text-muted">ALERTAS STOCK BAJO</small>
-                <div class="h3">{{ alertas_stock_bajo }}</div>
+                <small class="text-muted fw-bold">ALERTAS STOCK BAJO</small>
+                <div class="h3 mb-0 text-danger">{{ alertas_stock_bajo }}</div>
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="p-3 bg-white rounded shadow-sm">
-                <small class="text-muted">MOVIMIENTOS HOY</small>
-                <div class="h3">{{ movimientos_hoy }}</div>
+                <small class="text-muted fw-bold">MOVIMIENTOS HOY</small>
+                <div class="h3 mb-0 text-primary">{{ movimientos_hoy }}</div>
             </div>
         </div>
     </div>
 
-    <div class="card shadow-sm">
+    <!-- Tabla de Productos -->
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
             <div class="d-flex align-items-center justify-content-between mb-3">
-                <h5 class="card-title mb-0">PRODUCTOS</h5>
+                <h5 class="card-title mb-0">PRODUCTOS EN INVENTARIO</h5>
                 <a href="{% url 'crear_producto' %}" class="btn btn-sm btn-outline-primary">+ AGREGAR NUEVO PRODUCTO</a>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-hover text-uppercase">
-                    <thead>
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <th>NOMBRE DEL PRODUCTO</th>
                             <th>CATEGORÍA</th>
+                            <th>PRECIO</th>
                             <th>STOCK ACTUAL</th>
                             <th>ESTADO</th>
                             <th>ACCIONES</th>
@@ -53,9 +58,10 @@
                         {% for producto in productos %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ producto.nombre }}</td>
+                                <td><strong>{{ producto.nombre }}</strong></td>
                                 <td>{{ producto.categoria.nombre }}</td>
-                                <td>{{ producto.stock }}</td>
+                                <td>${{ producto.precio }}</td>
+                                <td><strong>{{ producto.stock }}</strong></td>
                                 <td>
                                     {% if producto.stock == 0 %}
                                         <span class="badge-sin">Sin Stock</span>
@@ -67,12 +73,12 @@
                                 </td>
                                 <td>
                                     <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                                    <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger ms-2">Borrar</a>
+                                    <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('¿Seguro que deseás dar de baja este producto? El historial de movimientos se conservará.');">Borrar</a>
                                 </td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="6" class="text-center">No hay productos registrados en el sistema actualmente.</td>
+                                <td colspan="7" class="text-center py-4 text-muted">No hay productos registrados en el sistema actualmente.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -81,4 +87,52 @@
         </div>
     </div>
 
+    <!-- Últimos Movimientos -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h5 class="card-title mb-0">ÚLTIMOS MOVIMIENTOS</h5>
+                <a href="{% url 'movimientos' %}" class="btn btn-sm btn-outline-secondary">Ver historial completo →</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Producto</th>
+                            <th>Tipo</th>
+                            <th>Cantidad</th>
+                            <th>Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in recent_movements %}
+                            <tr>
+                                <td class="text-muted">{{ m.fecha|date:'d/m/Y H:i' }}</td>
+                                <td><strong>{{ m.producto.nombre|default:"(Dado de baja)" }}</strong></td>
+                                <td>
+                                    {% if m.tipo == 'ENTRADA' %}
+                                        <span class="badge-success">Entrada</span>
+                                    {% elif m.tipo == 'ALTA' %}
+                                        <span class="badge-normal">Alta</span>
+                                    {% elif m.tipo == 'AJUSTE' %}
+                                        <span class="badge-bajo">Ajuste</span>
+                                    {% else %}
+                                        <span class="badge-danger">Salida</span>
+                                    {% endif %}
+                                </td>
+                                <td><strong>{{ m.cantidad }} u.</strong></td>
+                                <td class="text-muted">{{ m.motivo|default:"-" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-3 text-muted">No hay movimientos registrados recientemente.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

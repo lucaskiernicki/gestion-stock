@@ -1,0 +1,32 @@
+# Entornos virtuales
+env/
+venv/
+.venv/
+ENV/
+
+# Archivos compilados y caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Base de datos local (para repositorios limpios)
+# Si deseas incluir la base de datos con datos de prueba, podés comentar la siguiente línea:
+# db.sqlite3
+
+# Archivos del sistema y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+*.ini
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs y temporizadores
+*.log
+scratch/
+
+# Plantillas locales de referencia
+plantillas para el proyecto/

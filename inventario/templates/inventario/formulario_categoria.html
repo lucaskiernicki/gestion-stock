@@ -1,0 +1,45 @@
+{% extends 'inventario/base.html' %}
+
+{% block contenido %}
+    <div class="mb-4">
+        <a href="{% url 'listar_categorias' %}" class="text-decoration-none">&larr; Volver a Categorías</a>
+        <h2 class="h4 mt-2">{% if categoria %}EDITAR CATEGORÍA{% else %}CREAR NUEVA CATEGORÍA{% endif %}</h2>
+    </div>
+
+    <div class="form-card" style="max-width: 500px;">
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="nombre" class="form-label fw-bold">NOMBRE DE LA CATEGORÍA *</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="nombre" 
+                    name="nombre"
+                    placeholder="Ej: Electrónica, Accesorios, etc."
+                    value="{% if categoria %}{{ categoria.nombre }}{% endif %}"
+                    required>
+            </div>
+
+            <div class="mb-3">
+                <label for="descripcion" class="form-label fw-bold">DESCRIPCIÓN (OPCIONAL)</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="descripcion" 
+                    name="descripcion"
+                    placeholder="Breve detalle o descripción de la categoría..."
+                    value="{% if categoria %}{{ categoria.descripcion|default:'' }}{% endif %}">
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-figma-success">
+                    {% if categoria %}GUARDAR CAMBIOS{% else %}CREAR CATEGORÍA{% endif %}
+                </button>
+                <a href="{% url 'listar_categorias' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
